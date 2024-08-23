@@ -9,7 +9,7 @@ import { generateApple } from '../utils/utils';
 import { useButtons, useTimer } from '../utils/hooks';
 import { Direction } from '../utils/utils';
 import { Score } from './Score';
-import { sendSessionData } from 'utils/sendSessionData';
+import { sendSessionData } from '../utils/sendSessionData';
 
 export const Game = () => {
   const { direction, setDirection } = useButtons(Direction.Right);
