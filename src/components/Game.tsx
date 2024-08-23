@@ -8,8 +8,8 @@ import { getDefaultSnake } from '../utils/utils';
 import { generateApple } from '../utils/utils';
 import { useButtons, useTimer } from '../utils/hooks';
 import { Direction } from '../utils/utils';
-import { Score } from './Score';
 import { sendSessionData } from '../utils/sendSessionData';
+import { ModalWindow } from '../utils/modalWindow';
 
 export const Game = () => {
   const { direction, setDirection } = useButtons(Direction.Right);
@@ -17,17 +17,19 @@ export const Game = () => {
   const [score, setScore] = useState(0);
   const [snake, setSnake] = useState<SnakeTypes>(getDefaultSnake());
   const [apple, setApple] = useState<AppleTypes>(generateApple());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   useEffect(() => {
-    moveSnake();
+    if (!isGameOver) {
+      moveSnake();
+    }
   }, [timerInterval]);
 
   useEffect(() => {
-    if (isBorderCollision()) {
-      return gameOver();
-    }
+    if (isGameOver) return;
 
-    if (isSelfCollision()) {
+    if (isBorderCollision() || isSelfCollision()) {
       return gameOver();
     }
 
@@ -70,6 +72,11 @@ export const Game = () => {
         };
         break;
       }
+    }
+
+    if (head && (isBorderCollision(head) || isSelfCollision())) {
+      gameOver();
+      return;
     }
 
     if (head !== null) {
@@ -118,8 +125,8 @@ export const Game = () => {
     return head.x === apple.x && head.y === apple.y;
   }
 
-  function isBorderCollision() {
-    const { head } = snake;
+  function isBorderCollision(head: SnakeType = snake.head) {
+    // const { head } = snake;
 
     if (head.x >= 100 || head.x < 0 || head.y >= 100 || head.y < 0) {
       return true;
@@ -141,12 +148,18 @@ export const Game = () => {
   }
 
   function gameOver() {
-    alert(`GAME OVER! Your score ${score}`);
-    resetGame();
+    setIsGameOver(true);
+    setIsModalOpen(true);
     sendSessionData(score);
   }
 
+  function handleModalClose() {
+    setIsModalOpen(false);
+    resetGame();
+  }
+
   function resetGame() {
+    setIsGameOver(false);
     setDirection(Direction.Right);
     updateTimer(200);
     setScore(0);
@@ -160,7 +173,12 @@ export const Game = () => {
         <Snake snake={snake} />
         <Apple apple={apple} />
       </Board>
-      <Score score={score} />
+      {/* <Score score={score} /> */}
+      <ModalWindow
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        score={score}
+      />
     </div>
   );
 };
