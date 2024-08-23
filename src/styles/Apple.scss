@@ -1,14 +1,8 @@
 .apple {
-  background-color: red;
-  width: 100%;
-  height: 100%;
-}
-
-@for $row from 1 through 20 {
-  @for $col from 1 through 20 {
-    .pos__#{$row}-#{$col} {
-      grid-row-start: #{$row};
-      grid-column-start: #{$col};
-    }
-  }
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  background-image: url('../src/assets/apple.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }

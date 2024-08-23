@@ -1,14 +1,20 @@
 import * as React from 'react';
 import '../styles/Apple.scss';
 
-interface AppleProps {
-  position: number;
+export interface AppleTypes {
+  x: number;
+  y: number;
 }
 
-export default function Apple({ position }: AppleProps) {
-  return (
-    <div
-      className={`apple pos-${position[1]}-${position[0]}`}
-    />
-  );
+interface AppleProps {
+  apple: AppleTypes;
+}
+
+export function Apple({ apple }: AppleProps) {
+  const styles = {
+    left: `${apple.x}%`,
+    top: `${apple.y}%`,
+  };
+
+  return <div className="apple" style={styles}></div>;
 }
