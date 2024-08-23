@@ -9,6 +9,7 @@ import { generateApple } from '../utils/utils';
 import { useButtons, useTimer } from '../utils/hooks';
 import { Direction } from '../utils/utils';
 import { Score } from './Score';
+import { sendSessionData } from 'utils/sendSessionData';
 
 export const Game = () => {
   const { direction, setDirection } = useButtons(Direction.Right);
@@ -142,6 +143,7 @@ export const Game = () => {
   function gameOver() {
     alert(`GAME OVER! Your score ${score}`);
     resetGame();
+    sendSessionData(score);
   }
 
   function resetGame() {
